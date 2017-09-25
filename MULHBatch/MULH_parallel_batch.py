@@ -67,7 +67,7 @@ def run_and_write_result(mulh):
     elif power==1: # Simulation complete without any multipac detected
         power = 0
 
-    with open('/Home/AP252436/Work_MULH/Parallel_batch/Pth_NoField_C3_SEY-MULH_160electrons_ModVaughan_reflect_electron.csv','ba') as f_handle:   
+    with open('/Home/AP252436/Work_MULH/Parallel_batch/essais.csv','ba') as f_handle:   
         ## Tricks to save a row vector instead of a column one
         np.savetxt(f_handle, np.array([float(param), power])[np.newaxis], fmt='%f', delimiter = '\t')
 

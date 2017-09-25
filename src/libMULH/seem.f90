@@ -221,86 +221,86 @@ if (seec == 1) then	!************* Vaughan model **************!
     if (r < Pe) then
 
       ! Reflect electron elastically
-      pvf = reflect_electron(pcol,penf1*(-e),pvf1,1)
+      pvf = reflect_electron(pcol,penf1*(-e),pvf1,1,seec)
 
-      if (allocated(SEYvsE)) then
-	call add23Darray(SEYvsE,(/0,0,1/))
-	k = size(SEYvsE,3)
-        SEYvsE(1,1,k) = penf1
-        SEYvsE(1,2,k) = delta
-      else
-        allocate (SEYvsE(4,2,1))
-        SEYvsE(1,1,1) = penf1
-        SEYvsE(1,2,1) = delta
-      endif
+!      if (allocated(SEYvsE)) then
+!	call add23Darray(SEYvsE,(/0,0,1/))
+!	k = size(SEYvsE,3)
+!        SEYvsE(1,1,k) = penf1
+!        SEYvsE(1,2,k) = delta
+!      else
+!        allocate (SEYvsE(4,2,1))
+!        SEYvsE(1,1,1) = penf1
+!        SEYvsE(1,2,1) = delta
+!      endif
 
     elseif (r >= Pe .AND. r < (Pe+Pr)) then
 
       ! Electron is reflected inelastically
-      !pvf = reflect_electron(pcol,penf1*(-e),pvf1,2,atype)
+      pvf = reflect_electron(pcol,penf1*(-e),pvf1,2,seec,atype)
+! Old code portion, now written in reflect_electron. Kept it in case of bugs.
+      !allocate (thetas(1))
+      !allocate (phis(1))
+      !allocate (penf(1))
+      !allocate (vs(1))
 
-      allocate (thetas(1))
-      allocate (phis(1))
-      allocate (penf(1))
-      allocate (vs(1))
-
-      penf = taus88() * penf1
-      vs = sqrt(2*penf*(-eme))
+      !penf = taus88() * penf1
+      !vs = sqrt(2*penf*(-eme))
                         
       ! Determine which is the normal component of the outgoing velocity
-      if (pcol(1)==1 .OR. pcol(3)==1) then
-        i = 1              ! Normal component
-        j = 2              ! Parallel component(not z)
-      elseif (pcol(2)==1 .OR. pcol(4)==1) then
-        i = 2              ! Normal component
-        j = 1              ! Parallel component (not z)
-      endif
+      !if (pcol(1)==1 .OR. pcol(3)==1) then
+      !  i = 1              ! Normal component
+      !  j = 2              ! Parallel component(not z)
+      !elseif (pcol(2)==1 .OR. pcol(4)==1) then
+      !  i = 2              ! Normal component
+      !  j = 1              ! Parallel component (not z)
+      !endif
                 
-      rt = taus88()
-      phis = rt * 2 * pi        ! Calculate emission azimuthal angle of secondaries
+      !rt = taus88()
+      !phis = rt * 2 * pi        ! Calculate emission azimuthal angle of secondaries
 
-      rt = taus88()
-      thetas = asin(2*rt - 1)   ! Calculate emission angle of secondaries with respect to the normal
+      !rt = taus88()
+      !thetas = asin(2*rt - 1)   ! Calculate emission angle of secondaries with respect to the normal
             
-      pvf(1,i) = vs(1) * cos(thetas(1))   ! Normal component of secondary velocity
+      !pvf(1,i) = vs(1) * cos(thetas(1))   ! Normal component of secondary velocity
 
-      pvf(1,j) = sin(phis(1)) * vs(1) * sin(thetas(1))
-      pvf(1,3) = cos(phis(1)) * vs(1) * sin(thetas(1))
+      !pvf(1,j) = sin(phis(1)) * vs(1) * sin(thetas(1))
+      !pvf(1,3) = cos(phis(1)) * vs(1) * sin(thetas(1))
 
-      if (pcol(1) == 1 .OR. pcol(2) == 1) then
-        pvf(1,i) = - abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
-      elseif (pcol(3) == 1 .OR. pcol(4) == 1) then
-        pvf(1,i) = abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
-      endif
+      !if (pcol(1) == 1 .OR. pcol(2) == 1) then
+      !  pvf(1,i) = - abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
+      !elseif (pcol(3) == 1 .OR. pcol(4) == 1) then
+      !  pvf(1,i) = abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
+      !endif
          
-      deallocate (thetas)
-      deallocate (phis)
-      deallocate (penf)
-      deallocate (vs)
+      !deallocate (thetas)
+      !deallocate (phis)
+      !deallocate (penf)
+      !deallocate (vs)
 
-      if (allocated(SEYvsE)) then
-	call add23Darray(SEYvsE,(/0,0,1/))
-	k = size(SEYvsE,3)
-        SEYvsE(2,1,k) = penf1
-        SEYvsE(2,2,k) = delta
-      else
-        allocate (SEYvsE(4,2,1))
-        SEYvsE(2,1,1) = penf1
-        SEYvsE(2,2,1) = delta
-      endif
+!      if (allocated(SEYvsE)) then
+!	call add23Darray(SEYvsE,(/0,0,1/))
+!	k = size(SEYvsE,3)
+!        SEYvsE(2,1,k) = penf1
+!        SEYvsE(2,2,k) = delta
+!      else
+!        allocate (SEYvsE(4,2,1))
+!        SEYvsE(2,1,1) = penf1
+!        SEYvsE(2,2,1) = delta
+!      endif
 
     else
          
-      if (allocated(SEYvsE)) then
-	call add23Darray(SEYvsE,(/0,0,1/))
-	k = size(SEYvsE,3)
-        SEYvsE(3,1,k) = penf1
-        SEYvsE(3,2,k) = delta
-      else
-        allocate (SEYvsE(4,2,1))
-        SEYvsE(3,1,1) = penf1
-        SEYvsE(3,2,1) = delta
-      endif
+!     if (allocated(SEYvsE)) then
+!call add23Darray(SEYvsE,(/0,0,1/))
+!k = size(SEYvsE,3)
+ !      SEYvsE(3,1,k) = penf1
+!       SEYvsE(3,2,k) = delta
+!     else
+!       allocate (SEYvsE(4,2,1))
+!       SEYvsE(3,1,1) = penf1
+!       SEYvsE(3,2,1) = delta
+!     endif
 
       allocate (yn(1))
       allocate (thetas(1))
@@ -381,16 +381,16 @@ if (seec == 1) then	!************* Vaughan model **************!
     endif
   elseif (s > 1) then
 
-      if (allocated(SEYvsE)) then
-	call add23Darray(SEYvsE,(/0,0,1/))
-	k = size(SEYvsE,3)
-        SEYvsE(3,1,k) = penf1
-        SEYvsE(3,2,k) = delta
-      else
-        allocate(SEYvsE(4,2,1))
-        SEYvsE(3,1,1) = penf1
-        SEYvsE(3,2,1) = delta
-      endif
+!      if (allocated(SEYvsE)) then
+!	call add23Darray(SEYvsE,(/0,0,1/))
+!	k = size(SEYvsE,3)
+!        SEYvsE(3,1,k) = penf1
+!        SEYvsE(3,2,k) = delta
+!      else
+!        allocate(SEYvsE(4,2,1))
+!        SEYvsE(3,1,1) = penf1
+!        SEYvsE(3,2,1) = delta
+!      endif
 
     allocate (pvf(s,3))
     allocate (yn(s))
@@ -730,7 +730,7 @@ elseif (seec == 3) then
     allocate (pvf(1,3))	! Only one electron comes off the wall
     pvf = 0.       ! velocity of 1 secondary electron
     ! Reflect electron elastically
-    pvf = reflect_electron(pcol,penf1*(-e),pvf1,1)
+    pvf = reflect_electron(pcol,penf1*(-e),pvf1,1,seec)
 
   elseif (r >= Pe .AND. r < (Pe+Pr)) then
 
@@ -738,7 +738,7 @@ elseif (seec == 3) then
     allocate (pvf(1,3))	! Only one electron comes off the wall
     pvf = 0.       ! velocity of 1 secondary electron
     ! Electron is reflected inelastically
-    pvf = reflect_electron(pcol,penf1*(-e),pvf1,2,atype)
+    pvf = reflect_electron(pcol,penf1*(-e),pvf1,2,seec,atype)
 
   else
 
@@ -969,46 +969,46 @@ elseif (seec == 4) then	! New model as of Jul12 2013. FEST3Dish?
   if (penf1 <= E_0*4) then	! Reflect electron
 
       ! Reflect electron inelastically
-!      pvf = reflect_electron(pcol,penf1*(-e),pvf1,2)
+      pvf = reflect_electron(pcol,penf1*(-e),pvf1,2,seec)
+! Old code portion, now written in reflect_electron. Kept it in case of bugs.
+      !allocate (thetas(1))
+      !allocate (phis(1))
+      !allocate (penf(1))
+      !allocate (vs(1))
 
-      allocate (thetas(1))
-      allocate (phis(1))
-      allocate (penf(1))
-      allocate (vs(1))
-
-      penf = taus88() * penf1
-      vs = sqrt(2*penf*(-eme))
+      !penf = taus88() * penf1
+      !vs = sqrt(2*penf*(-eme))
                         
       ! Determine which is the normal component of the outgoing velocity
-      if (pcol(1)==1 .OR. pcol(3)==1) then
-        i = 1              ! Normal component
-        j = 2              ! Parallel component(not z)
-      elseif (pcol(2)==1 .OR. pcol(4)==1) then
-        i = 2              ! Normal component
-        j = 1              ! Parallel component (not z)
-      endif
+      !if (pcol(1)==1 .OR. pcol(3)==1) then
+      !  i = 1              ! Normal component
+      !  j = 2              ! Parallel component(not z)
+      !elseif (pcol(2)==1 .OR. pcol(4)==1) then
+      !  i = 2              ! Normal component
+      !  j = 1              ! Parallel component (not z)
+      !endif
                 
-      rt = taus88()
-      phis = rt * 2 * pi        ! Calculate emission azimuthal angle of secondaries
+      !rt = taus88()
+      !phis = rt * 2 * pi        ! Calculate emission azimuthal angle of secondaries
 
-      rt = taus88()
-      thetas = asin(2*rt - 1)   ! Calculate emission angle of secondaries with respect to the normal
+      !rt = taus88()
+      !thetas = asin(2*rt - 1)   ! Calculate emission angle of secondaries with respect to the normal
             
-      pvf(1,i) = vs(1) * cos(thetas(1))   ! Normal component of secondary velocity
+      !pvf(1,i) = vs(1) * cos(thetas(1))   ! Normal component of secondary velocity
 
-      pvf(1,j) = sin(phis(1)) * vs(1) * sin(thetas(1))
-      pvf(1,3) = cos(phis(1)) * vs(1) * sin(thetas(1))
+      !pvf(1,j) = sin(phis(1)) * vs(1) * sin(thetas(1))
+      !pvf(1,3) = cos(phis(1)) * vs(1) * sin(thetas(1))
 
-      if (pcol(1) == 1 .OR. pcol(2) == 1) then
-        pvf(1,i) = - abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
-      elseif (pcol(3) == 1 .OR. pcol(4) == 1) then
-        pvf(1,i) = abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
-      endif
+      !if (pcol(1) == 1 .OR. pcol(2) == 1) then
+      !  pvf(1,i) = - abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
+      !elseif (pcol(3) == 1 .OR. pcol(4) == 1) then
+      !  pvf(1,i) = abs(pvf(1,i))   ! Normal velocity pointing into the inside of the waveguide
+      !endif
          
-      deallocate (thetas)
-      deallocate (phis)
-      deallocate (penf)
-      deallocate (vs)
+      !deallocate (thetas)
+      !deallocate (phis)
+      !deallocate (penf)
+      !deallocate (vs)
         
   else		! True secondary(ies)
         
