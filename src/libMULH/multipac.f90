@@ -494,7 +494,7 @@ do while (complete == 0)
       endif	!!!!!!!!!!! end of pstat==1 if
 
       if (full .AND. sum(pstat, MASK = pstat .EQ. 3)==0 .AND. sum(pstat, MASK = pstat .EQ. 4)==0) then
-	write(*,*) 'Condition if pas comprise. Voir multipac.f90 ligne 498' !pact = Nt
+	!pact = Nt
 	exit
       endif
 
@@ -602,12 +602,12 @@ if (atype == 8 .OR. atype == 9) then
   endif
 
 endif
-!open(unit=10,file=trim(dirname)//'/SEYvsE.txt',status='unknown')
-open(unit=666,file='../data/SEYvsE3.txt',status='unknown')
-do i = 1,size(SEYvsE,3)
-  write(666,13) SEYvsE(1,1,i),SEYvsE(1,2,i),SEYvsE(2,1,i), SEYvsE(2,2,i),SEYvsE(3,1,i),SEYvsE(3,2,i),SEYvsE(4,1,i),SEYvsE(4,2,i)
-enddo
-close(unit=666)
+
+!open(unit=10,file='../data/SEYvsE.txt',status='unknown')
+!do i = 1,size(SEYvsE,3)
+!  write(10,13) SEYvsE(1,1,i),SEYvsE(1,2,i),SEYvsE(2,1,i), SEYvsE(2,2,i),SEYvsE(3,1,i),SEYvsE(3,2,i),SEYvsE(4,1,i),SEYvsE(4,2,i)
+!enddo
+!close(unit=10)
 
 !!!!!! Save setup !!!!!!
 open(unit=13,file=trim(dirname)//'/setup.txt',status='unknown')

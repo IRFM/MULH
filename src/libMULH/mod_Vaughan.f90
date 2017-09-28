@@ -35,8 +35,8 @@ real(long) :: xi, k, delta, deltas
 
 if (E1==35 .AND. Emax==165 .AND. abs(deltamax-2.3) < 1e-6) then
   ! This is FEST Cu
-  E_0 = 21
-  E_0p = 20
+  E_0 = 22
+  E_0p = 21
 else
     
   ! Initial values
